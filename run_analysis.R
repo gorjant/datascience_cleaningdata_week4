@@ -10,7 +10,7 @@ if (!file.exists("getdata_dataset.zip")){
 }  
 if (!file.exists("UCI HAR Dataset")) 
 {
-  unzip(filename) 
+  unzip("getdata_dataset.zip") 
 }
 
 # read files 
@@ -40,7 +40,7 @@ test<-cbind(tsubj,tests,test)
 
 # Connect Labels to datasets 
 complete_data<-rbind(train, test)
-colnames(complete_data) <- c("subjectid", "activity", cleanfeat.names)
+colnames(complete_data) <- c("subject", "activity", cleanfeat.names)
 
 # Make factors 
 complete_data$activity <- factor(complete_data$activity, levels = actl[,1], labels = actl[,2])
