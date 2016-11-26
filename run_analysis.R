@@ -20,10 +20,10 @@ features <- read.table("UCI HAR Dataset/features.txt")
 features[,2] <- as.character(features[,2])
 
 # take data for mean and standard deviation
-cleanfeat <- grep(".*mean.*|.*std.*", features[,2])
+cleanfeat <- grep(".*std.*|.*mean.*", features[,2])
 cleanfeat.names <- features[cleanfeat,2]
-cleanfeat.names <- gsub('-mean', 'Mean', cleanfeat.names)
 cleanfeat.names <- gsub('-std', 'Std', cleanfeat.names)
+cleanfeat.names <- gsub('-mean', 'Mean', cleanfeat.names)
 cleanfeat.names <- gsub('[-()]', '', cleanfeat.names)
 
 # read datasets
@@ -32,14 +32,15 @@ activities <- read.table("UCI HAR Dataset/train/Y_train.txt")
 trainSubjects <- read.table("UCI HAR Dataset/train/subject_train.txt")
 train <- cbind(trainSubjects, activities, train)
 
-test <- read.table("UCI HAR Dataset/test/X_test.txt")[cleanfeat]
-tests <- read.table("UCI HAR Dataset/test/Y_test.txt")
-tsubj <- read.table("UCI HAR Dataset/test/subject_test.txt")
-test <- cbind(tsubj, tests, test)
+# Concat the columns
+tests<-read.table("UCI HAR Dataset/test/Y_test.txt")
+test<-read.table("UCI HAR Dataset/test/X_test.txt")[cleanfeat]
+tsubj<-read.table("UCI HAR Dataset/test/subject_test.txt")
+test<-cbind(tsubj,tests,test)
 
 # Connect Labels to datasets 
-complete_data <- rbind(train, test)
-colnames(complete_data) <- c("subject", "activity", cleanfeat.names)
+complete_data<-rbind(train, test)
+colnames(complete_data) <- c("subjectid", "activity", cleanfeat.names)
 
 # Make factors 
 complete_data$activity <- factor(complete_data$activity, levels = actl[,1], labels = actl[,2])
